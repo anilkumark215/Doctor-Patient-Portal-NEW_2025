@@ -33,12 +33,14 @@
 // 	}
 // }
 
+// 
+
+
+
 package com.hms.db;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.util.Properties;
-import java.io.InputStream;
 
 public class DBConnection {
 
@@ -47,29 +49,21 @@ public class DBConnection {
     public static Connection getConn() {
         try {
             if (conn == null || conn.isClosed()) {
-                // Load db.properties from resources folder
-                Properties props = new Properties();
-                InputStream input = DBConnection.class.getClassLoader().getResourceAsStream("db.properties");
-
-                if (input == null) {
-                    throw new RuntimeException("⚠️ db.properties file not found in resources folder!");
-                }
-
-                props.load(input);
-
-                String url = props.getProperty("db.url");
-                String username = props.getProperty("db.username");
-                String password = props.getProperty("db.password");
-
                 // Load MySQL driver
                 Class.forName("com.mysql.cj.jdbc.Driver");
 
-                // Establish connection
+                // Read environment variables (Render dashboard)
+                String url = System.getenv("DB_URL");
+                String username = System.getenv("DB_USERNAME");
+                String password = System.getenv("DB_PASSWORD");
+
+                // Connect
                 conn = DriverManager.getConnection(url, username, password);
                 System.out.println("✅ Database connected successfully!");
             }
         } catch (Exception e) {
             e.printStackTrace();
+            System.err.println("❌ Database connection failed!");
         }
         return conn;
     }
