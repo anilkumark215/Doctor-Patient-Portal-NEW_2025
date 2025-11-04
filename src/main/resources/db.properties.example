@@ -1,0 +1,7 @@
+# Sample database configuration file
+# Copy this file and rename it to "db.properties"
+# Then replace with your actual DB credentials
+
+db.url=jdbc:mysql://localhost:3306/your_database
+db.username=your_username
+db.password=your_password
